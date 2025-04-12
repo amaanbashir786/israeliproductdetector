@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Origin Checker</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Search Section */
+        .search-section {
+            padding: 3rem 0;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .search-section h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #2c3e50;
+        }
+
+        .input-group {
+            display: flex;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 12px 15px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            outline: none;
+        }
+
+        .input-group button {
+            padding: 12px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .input-group button:hover {
+            background-color: #2980b9;
+        }
+
+        .or-divider {
+            text-align: center;
+            margin: 1rem 0;
+            color: #7f8c8d;
+            font-weight: bold;
+        }
+
+        .scan-btn {
+            display: block;
+            margin: 0 auto;
+            padding: 12px 25px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .scan-btn:hover {
+            background-color: #219653;
+        }
+
+        /* Result Section */
+        .result-section {
+            padding: 3rem 0;
+            background-color: #f9f9f9;
+        }
+
+        .result-card {
+            display: flex;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .product-image {
+            width: 200px;
+            padding: 20px;
+            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-image img {
+            max-width: 100%;
+            max-height: 200px;
+        }
+
+        .product-info {
+            flex: 1;
+            padding: 25px;
+        }
+
+        .product-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+
+        .origin-info {
+            margin-bottom: 1.5rem;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .origin-label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .origin-value {
+            font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 3px;
+        }
+
+        /* Origin Styling */
+        .origin-value.israeli {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .origin-value.non-israeli {
+            background-color: #27ae60;
+            color: white;
+        }
+
+        .company-info, .alternative-section {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #eee;
+        }
+
+        .company-info h4, .alternative-section h4 {
+            margin-bottom: 0.8rem;
+            color: #2c3e50;
+        }
+
+        .alternative-list {
+            list-style-type: none;
+        }
+
+        .alternative-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        /* Info Section */
+        .info-section {
+            padding: 3rem 0;
+            background-color: white;
+        }
+
+        .info-section h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #2c3e50;
+        }
+
+        .info-section p {
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            text-align: center;
+        }
+
+        .feature-box {
+            background-color: #f8f9fa;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+        }
+
+        .feature-box h3 {
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+
+        .feature-box ol {
+            padding-left: 1.5rem;
+        }
+
+        .feature-box li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        footer p {
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .result-card {
+                flex-direction: column;
+            }
+            
+            .product-image {
+                width: 100%;
+                padding: 20px;
+            }
+            
+            .input-group {
+                flex-direction: column;
+            }
+            
+            .input-group input {
+                border-radius: 4px;
+                margin-bottom: 10px;
+            }
+            
+            .input-group button {
+                border-radius: 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Product Origin Checker</h1>
+        <p>Identify product origins and find alternatives</p>
+    </header>
+
+    <main>
+        <section class="search-section">
+            <div class="container">
+                <h2>Check a Product</h2>
+                <form id="productForm">
+                    <div class="input-group">
+                        <input type="text" id="productInput" placeholder="Enter product name or barcode" required>
+                        <button type="submit">Check</button>
+                    </div>
+                </form>
+                <div class="or-divider">OR</div>
+                <button id="scanBtn" class="scan-btn">Scan Barcode</button>
+            </div>
+        </section>
+
+        <section class="result-section" id="resultSection" style="display: none;">
+            <div class="container">
+                <div class="result-card">
+                    <div class="product-image">
+                        <img id="productImage" src="" alt="Product image">
+                    </div>
+                    <div class="product-info">
+                        <h3 id="productName"></h3>
+                        <div class="origin-info">
+                            <span class="origin-label">Origin:</span>
+                            <span id="productOrigin" class="origin-value"></span>
+                        </div>
+                        <div id="companyInfo" class="company-info">
+                            <h4>Manufacturer Information</h4>
+                            <p id="companyDetails"></p>
+                        </div>
+                        <div id="alternativeSection" class="alternative-section">
+                            <h4>Alternative Products</h4>
+                            <ul id="alternativeList" class="alternative-list"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="info-section">
+            <div class="container">
+                <h2>About This Tool</h2>
+                <p>This tool helps consumers identify the origin of products and make informed purchasing decisions. Our database contains information about product manufacturers and their country of origin.</p>
+                
+                <div class="feature-box">
+                    <h3>How It Works</h3>
+                    <ol>
+                        <li>Enter a product name or scan its barcode</li>
+                        <li>Our system checks against our database</li>
+                        <li>Receive information about the product's origin</li>
+                        <li>Find alternative products if available</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>Product Origin Checker &copy; 2023</p>
+            <p>Note: This tool relies on available product data and may not be 100% accurate.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const productForm = document.getElementById('productForm');
+            const productInput = document.getElementById('productInput');
+            const resultSection = document.getElementById('resultSection');
+            const productName = document.getElementById('productName');
+            const productOrigin = document.getElementById('productOrigin');
+            const companyDetails = document.getElementById('companyDetails');
+            const alternativeList = document.getElementById('alternativeList');
+            const productImage = document.getElementById('productImage');
+            const scanBtn = document.getElementById('scanBtn');
+
+            // Sample database (in a real app, this would be a proper database)
+            const productDatabase = {
+                // Israeli products
+                '7290000000000': {
+                    name: 'Osem Bamba Snacks',
+                    origin: 'Israel',
+                    company: 'Osem (a subsidiary of Nestlé)',
+                    description: 'Osem is one of Israel\'s largest food manufacturers, owned by Nestlé since 2016.',
+                    alternatives: ['Pirate\'s Booty (USA)', 'Cheetos (USA)', 'Hippeas (UK)'],
+                    image: 'https://via.placeholder.com/200?text=Bamba+Snacks'
+                },
+                '7290100000000': {
+                    name: 'Sabon Hand Cream',
+                    origin: 'Israel',
+                    company: 'Sabon NYC (Israeli-owned)',
+                    description: 'Sabon is an Israeli cosmetics company with international presence.',
+                    alternatives: ['L\'Occitane (France)', 'Crabtree & Evelyn (UK)', 'Burt\'s Bees (USA)'],
+                    image: 'https://via.placeholder.com/200?text=Sabon+Cream'
+                },
+                
+                // Non-Israeli products
+                '4014400000000': {
+                    name: 'Ritter Sport Chocolate',
+                    origin: 'Germany',
+                    company: 'Alfred Ritter GmbH & Co. KG',
+                    description: 'German chocolate manufacturer founded in 1912.',
+                    alternatives: [],
+                    image: 'https://via.placeholder.com/200?text=Ritter+Chocolate'
+                },
+                '5449000000000': {
+                    name: 'Coca-Cola',
+                    origin: 'USA',
+                    company: 'The Coca-Cola Company',
+                    description: 'American multinational beverage corporation.',
+                    alternatives: [],
+                    image: 'https://via.placeholder.com/200?text=Coca-Cola'
+                }
+            };
+
+            // Form submission handler
+            productForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                checkProduct(productInput.value.trim());
+            });
+
+            // Scan button handler (simulated)
+            scanBtn.addEventListener('click', function() {
+                // In a real app, this would activate device camera for barcode scanning
+                alert('Barcode scanning would be activated here on mobile devices');
+                // For demo purposes, we'll simulate a scan with a known product
+                productInput.value = '7290000000000';
+                checkProduct('7290000000000');
+            });
+
+            // Product checking function
+            function checkProduct(query) {
+                // Clear previous results
+                resultSection.style.display = 'none';
+                
+                // Find product in database (in a real app, this would be an API call)
+                let product = null;
+                
+                // Check if query is a barcode (numeric)
+                if (/^\d+$/.test(query)) {
+                    product = productDatabase[query];
+                } else {
+                    // Search by name (case insensitive)
+                    for (const key in productDatabase) {
+                        if (productDatabase[key].name.toLowerCase().includes(query.toLowerCase())) {
+                            product = productDatabase[key];
+                            break;
+                        }
+                    }
+                }
+                
+                // Display results
+                if (product) {
+                    productName.textContent = product.name;
+                    companyDetails.textContent = product.description;
+                    
+                    // Set origin with appropriate styling
+                    productOrigin.textContent = product.origin;
+                    productOrigin.className = 'origin-value ' + (product.origin === 'Israel' ? 'israeli' : 'non-israeli');
+                    
+                    // Set image (in real app, would use actual product image)
+                    productImage.src = product.image || 'https://via.placeholder.com/200?text=Product+Image';
+                    productImage.alt = product.name;
+                    
+                    // Display alternatives if available
+                    alternativeList.innerHTML = '';
+                    if (product.alternatives && product.alternatives.length > 0) {
+                        product.alternatives.forEach(alt => {
+                            const li = document.createElement('li');
+                            li.textContent = alt;
+                            alternativeList.appendChild(li);
+                        });
+                        document.getElementById('alternativeSection').style.display = 'block';
+                    } else {
+                        document.getElementById('alternativeSection').style.display = 'none';
+                    }
+                    
+                    resultSection.style.display = 'block';
+                    window.scrollTo({
+                        top: resultSection.offsetTop - 20,
+                        behavior: 'smooth'
+                    });
+                } else {
+                    alert('Product not found in our database. Please try another search term or barcode.');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
